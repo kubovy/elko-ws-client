@@ -1,0 +1,15 @@
+{
+  "name": "ElkoWS-Client",
+  "version": "1.0.0",
+  "description": "Elko WebSocket Client",
+  "readme": "README",
+  "license": "CC-BY-SA-4.0",
+  "repository": "github:kubovy/elko-ws-client",
+  "main": "elko-ws-client.js",
+  "dependencies": {
+    "advanced-json-path": "^1.0.8",
+    "axios": "^0.17.1",
+    "fs": "0.0.1-security",
+    "ws": "^4.0.0"
+  }
+}
