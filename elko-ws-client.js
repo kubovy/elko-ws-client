@@ -37,12 +37,6 @@ function RGB2HSV(json) {
     return parseInt(hsv.hue) + ',' + parseInt(hsv.saturation) + ',' + parseInt(hsv.value);
 }
 
-// console.log("1:" + JSON.stringify(RGBtoHSV(255,255,255, 100)));
-// console.log("2:" + JSON.stringify(RGBtoHSV(128,128,128, 100)));
-// console.log("3:" + JSON.stringify(RGBtoHSV(64,32,0, 100)));
-// console.log("5:" + JSON.stringify(RGBtoHSV(32,64,0, 50)));
-// console.log("4:" + JSON.stringify(RGBtoHSV(0,64,0, 50)));
-
 /*
  * HTTP Server
  */
