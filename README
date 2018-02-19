@@ -9,3 +9,8 @@ the state was changed from the outside, e.g. with RFWB-20/G.
 
 The script expects config.json to be present. Please check config.json.dist to start.
 
+Requirements: NodeJS, NPM
+
+Before start: $ npm install
+
+Start: $ node elko-ws-client.js
