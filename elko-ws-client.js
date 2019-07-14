@@ -5,7 +5,7 @@ const WebSocket = require('ws');
 const fs = require('fs');
 const DEBUG = false;
 
-console.log("Starting...");
+console.log("ELKO WS Client Starting...");
 
 let config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 if (DEBUG) console.log(config);
@@ -17,15 +17,15 @@ for (let i in config['elko']) {
 	let ws = new WebSocket(config['ws'].replace("{{HOST}}", host));
 
 	ws.on('open', function open() {
-		console.log('[WS] Client connected');
+		console.log('[WS:' + host + '] Client connected');
 	});
 
 	ws.on('close', function close() {
-		console.log('[WS] Client disconnected');
+		console.log('[WS:' + host + '] Client disconnected');
 	});
 
 	ws.on('message', function incoming(data) {
-		console.log("[WS] Incoming (" + host + "):", data);
+		console.log('[WS:' + host + '] Incoming (' + host + '):', data);
 		let pattern = RegExp(config['regex']);
 		let matches = pattern.exec(data);
 		if (matches && matches.length > 1) {

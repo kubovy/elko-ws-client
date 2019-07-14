@@ -6,7 +6,7 @@ const mqtt = require('mqtt');
 
 const DEBUG = false;
 
-console.log("Starting...");
+console.log("ELKO WS Process Starting...");
 
 let config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 if (DEBUG) console.log(config);
@@ -55,13 +55,13 @@ function processDevice(deviceId, host) {
 	"use strict";
 
 	let url = config['state'].replace("{{HOST}}", host).replace("{{DEVICE_ID}}", deviceId);
-	console.log("[HTTP] GET " + url);
+	console.log('[HTTP:' + host + '] GET ' + url);
 	axios.request({
 		method: 'GET',
 		url: url
 	}).then(function(response) {
 		let body = response.data;
-		console.log("[HTTP] Response (" + host + "): " + JSON.stringify(body) + ' - ' + body.hasOwnProperty('blue'));
+		console.log('[HTTP:' + host + '] Response (' + host + '): ' + JSON.stringify(body) + ' - ' + body.hasOwnProperty('blue'));
 
 		if (body.hasOwnProperty('red') && body.hasOwnProperty('green') && body.hasOwnProperty('blue') && body.hasOwnProperty('brightness')) {
 			let state = RGB2HSV(body['red'], body['green'], body['blue'], body['brightness']);
@@ -85,7 +85,7 @@ function processDevice(deviceId, host) {
 			if (body.hasOwnProperty('locked')) publishItemState(deviceId + "/locked", body['locked'] ? 'OPEN' : 'CLOSED', "CLOSED");
 			if (body.hasOwnProperty('error')) publishItemState(deviceId + "/error", body['error'] ? 'OPEN' : 'CLOSED', "CLOSED");
 		}
-		if (DEBUG) console.log("Result (" + host + "): '" + state + "'");
+		if (DEBUG) console.log('[HTTP:' + host + '] Result: "' + state + '"');
 	});
 }
 

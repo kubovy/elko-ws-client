@@ -7,10 +7,9 @@
   "repository": "github:kubovy/elko-ws-client",
   "main": "elko-ws-client.js",
   "dependencies": {
-    "axios": "^0.17.1",
+    "axios": "^0.19.0",
     "child_process": "^1.0.2",
-    "fs": "0.0.1-security",
-    "mqtt": "^2.17.0",
-    "ws": "^4.0.0"
+    "mqtt": "^3.0.0",
+    "ws": "^7.1.0"
   }
 }
