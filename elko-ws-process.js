@@ -5,7 +5,7 @@ const mqtt = require('mqtt');
 
 const DEBUG = false;
 
-console.log("ELKO WS Process Starting...");
+console.log(new Date() + ': ELKO WS Process Starting...');
 
 let config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 if (DEBUG) console.log(config);
@@ -44,7 +44,7 @@ function RGB2HSV(red, green, blue, brightness) {
  */
 function publishItemState(topic, payload, defaultValue) {
 	"use strict";
-	console.log("[MQTT] Publish: elko/state/" + topic + ": " + payload);
+	console.log(new Date() + ': [MQTT] Publish: elko/state/' + topic + ': ' + payload);
 	//client.subscribe('elko/control/#')
 	if (payload === null || payload === "null") payload = defaultValue;
 	client.publish("elko/state/" + topic, '' + payload, { "qos": 1, "retain": true});
@@ -78,15 +78,15 @@ function processDevice(data) {
 		if (result.hasOwnProperty('locked')) publishItemState(device + "/locked", result['locked'] ? 'OPEN' : 'CLOSED', "CLOSED");
 		if (result.hasOwnProperty('error')) publishItemState(device + "/error", result['error'] ? 'OPEN' : 'CLOSED', "CLOSED");
 	}
-	if (DEBUG) console.log('[HTTP:' + host + '] Result: "' + state + '"');
+	if (DEBUG) console.log(new Date() + ': [HTTP:' + host + '] Result: "' + state + '"');
 }
 
 client.on('connect', function() {
-	console.log("[MQTT] Client connected")
+	console.log(new Date() + ': [MQTT] Client connected')
 });
 
 client.on('message', function (topic, message) {
-	console.log("[MQTT] Message: " + topic + ": " + message.toString())
+	console.log(new Date() + ': [MQTT] Message: ' + topic + ': ' + message.toString())
 });
 
 process.on('message', function(message) {

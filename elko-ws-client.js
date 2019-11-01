@@ -6,17 +6,15 @@ const fs = require('fs');
 const http = require('http');
 const DEBUG = false;
 
-console.log("ELKO WS Client Starting...");
+console.log(new Date() + ': ELKO WS Client Starting...');
 
 let config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 if (DEBUG) console.log(config);
 
 let subprocess = child_process.fork(`${__dirname}/elko-ws-process.js`);
 let webservices = [];
-for (let i in config['elko']['controllers']) {
-	const host = config['elko']['controllers'][i];
-	let httpData = 'name=' + config['elko']['user'] + '&key=' + config['elko']['key'];
-	console.log(httpData);
+
+function connectWS(host, httpData) {
 	const httpRequest = http.request(
 		{
 			host: host,
@@ -30,23 +28,22 @@ for (let i in config['elko']['controllers']) {
 		},
 		function(response) {
 			let apiToken = response.headers['set-cookie'][0].split('=', 2)[1];
-			const ws = new WebSocket(config['ws'].replace("{{HOST}}", host), [], {
-				headers: {
-					'Cookie': 'AuthAPI=' + apiToken
-				}
+			let ws = new WebSocket(config['ws'].replace("{{HOST}}", host), [], {
+				headers: { 'Cookie': 'AuthAPI=' + apiToken }
 			});
-			console.log('[WS:' + host + '] Connecting with API token ' + apiToken + '...');
+			console.log(new Date() + ': [WS:' + host + '] Connecting with API token ' + apiToken + '...');
 
 			ws.on('open', function open() {
-				console.log('[WS:' + host + '] Client connected');
+				console.log(new Date() + ': [WS:' + host + '] Client connected');
 			});
 
 			ws.on('close', function close() {
-				console.log('[WS:' + host + '] Client disconnected');
+				console.log(new Date() + ': [WS:' + host + '] Client disconnected');
+				connectWS(host, httpData);
 			});
 
 			ws.on('message', function incoming(message) {
-				console.log('[WS:' + host + '] Incoming (' + host + '):', message);
+				console.log(new Date() + ': [WS:' + host + '] Incoming (' + host + '):', message);
 				subprocess.send(message);
 			});
 
@@ -54,4 +51,10 @@ for (let i in config['elko']['controllers']) {
 		});
 	httpRequest.write(httpData);
 	httpRequest.end();
+}
+
+for (let i in config['elko']['controllers']) {
+	const host = config['elko']['controllers'][i];
+	let httpData = 'name=' + config['elko']['user'] + '&key=' + config['elko']['key'];
+	connectWS(host, httpData);
 }
